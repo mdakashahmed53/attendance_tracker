@@ -83,6 +83,11 @@ class _SummeryScreenState extends State<SummeryScreen> {
                     Text('Present Students :', style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
+                    ),),
+                    SizedBox(height: 30,),
+                    Text('Present Students :', style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
                     ),)
                   ],
                 ),
