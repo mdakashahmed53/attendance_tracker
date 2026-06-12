@@ -1,5 +1,7 @@
+import 'package:attendance_tracker/provider_state/attendance_provider.dart';
 import 'package:attendance_tracker/screens/widgets/custom_circular_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SummeryScreen extends StatefulWidget {
   const SummeryScreen({super.key});
@@ -11,6 +13,16 @@ class SummeryScreen extends StatefulWidget {
 class _SummeryScreenState extends State<SummeryScreen> {
   @override
   Widget build(BuildContext context) {
+
+    final provider = Provider.of<AttendanceProvider>(context);
+
+    final int totalStudent = provider.students.length;
+
+    final double presentPercent = provider.presentCount / totalStudent;
+
+    final double absentPercent = provider.absentCount / totalStudent ;
+
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(child: Padding(
@@ -44,7 +56,7 @@ class _SummeryScreenState extends State<SummeryScreen> {
                       fontWeight: FontWeight.bold
                     ),),
                     SizedBox(height: 20,),
-                    CustomCircularProgress(percentage: 0.50, label: '5/10', subLabel: '50', activeColor: Colors.green)
+                    CustomCircularProgress(percentage: presentPercent, label: '${provider.presentCount}/10', subLabel: '${presentPercent*100}', activeColor: Colors.green)
                   ],
                 ),
 
@@ -58,7 +70,7 @@ class _SummeryScreenState extends State<SummeryScreen> {
                       fontWeight: FontWeight.bold
                     ),),
                     SizedBox(height: 20,),
-                    CustomCircularProgress(percentage: 0.50, label: '5/10', subLabel: '50', activeColor: Colors.grey)
+                    CustomCircularProgress(percentage: absentPercent, label: '${provider.absentCount}/10', subLabel: '${presentPercent*100}', activeColor: Colors.grey)
                   ],
                 ),
               ],
@@ -80,15 +92,28 @@ class _SummeryScreenState extends State<SummeryScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Present Students :', style: TextStyle(
+                    Text('Present Students : ', style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                     ),),
-                    SizedBox(height: 30,),
-                    Text('Present Students :', style: TextStyle(
+                    
+                    Text('( ${provider.presentStudents} )', style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600
+                    ),),
+                    
+                    SizedBox(height: 20,),
+                    Text('Absents Students :', style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
-                    ),)
+                    ),),
+
+
+
+                    Text('(${provider.absentStudents})', style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600
+                    ),),
                   ],
                 ),
               ),

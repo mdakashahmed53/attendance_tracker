@@ -1,9 +1,20 @@
+import 'package:attendance_tracker/provider_state/attendance_provider.dart';
 import 'package:attendance_tracker/screens/attendance_screen.dart';
 import 'package:attendance_tracker/screens/summery_screen.dart';
+import 'package:attendance_tracker/screens/test.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main(){
-  runApp(const MyApp());
+
+  runApp(
+      ChangeNotifierProvider(
+
+      create: (_) => AttendanceProvider(),
+      child: const MyApp()
+
+  )
+  );
 }
 
 

@@ -1,5 +1,8 @@
+import 'package:attendance_tracker/provider_state/attendance_provider.dart';
+import 'package:attendance_tracker/screens/summery_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({super.key});
@@ -24,21 +27,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     });
   }
 
-  List<bool> isClicked = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AttendanceProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
       body: SafeArea(
@@ -54,132 +47,34 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        CheckboxListTile(
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: ListView.builder(
+                      itemCount: provider.students.length,
+                      itemBuilder: (context, index) {
+
+                        final student = provider.students[index];
+                        return CheckboxListTile(
+                          side: BorderSide(width: 1.5),
                           title: Text(
-                            'Student 1',
+                            '${student.name} ${index +1}',
                             style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          value: isClicked[0],
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              isClicked[0] = newValue ?? false;
-                            });
+                          value: student.isPresent,
+                          onChanged: (value) {
+                            provider.toggolAttendance(index, value ?? false);
                           },
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 2',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: isClicked[1],
-                          onChanged: (value) {},
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 3',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 4',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 5',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 6',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 7',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 8',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 9',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            'Student 10',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -190,7 +85,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               SizedBox(
                 height: 50,
                 width: double.infinity,
-                child: ElevatedButton(onPressed: () {}, child: Text('Submit')),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_)=>SummeryScreen()));
+                  },
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  ),
+                ),
               ),
             ],
           ),
